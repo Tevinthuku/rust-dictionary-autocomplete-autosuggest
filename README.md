@@ -4,10 +4,22 @@
 
 A rust Dictionary Trie. Performs autosuggestions on words with typos & autocompletes words 🦀
 
+[Link to crate](https://crates.io/crates/auto_correct_n_suggest)
+
+## Installation
+
+Add 
+```
+auto_correct_n_suggest = "0.1.0"
+```
+to your Cargo.toml
+
 ### How to use
 
-```rs
-let mut dictionary = Dictionary::new();
+```rust
+use auto_correct_n_suggest;
+
+let mut dictionary = auto_correct_n_suggest::Dictionary::new();
 let word1 = "Dog".to_string();
 let word2 = "Dogecoin".to_string();
 dictionary.insert(word1);
