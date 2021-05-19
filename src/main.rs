@@ -68,11 +68,45 @@ impl Trie {
         }
         result
     }
+
+    fn auto_suggest(&mut self, word: String) -> Vec<String> {
+        let word_in_vec: Vec<char> = word.chars().collect();
+        if word_in_vec.is_empty() {
+            return self.get_elements();
+        }
+        let initial_word = String::default();
+        self.auto_suggest_internal(word_in_vec, initial_word)
+    }
+
+    fn auto_suggest_internal(
+        &mut self,
+        word_as_vec: Vec<char>,
+        mut word_so_far: String,
+    ) -> Vec<String> {
+        if word_as_vec.is_empty() {
+            return [word_so_far].to_vec();
+        }
+        let current_character = &word_as_vec[0];
+        let child = self.children.get_mut(current_character);
+        match child {
+            Some(trie) => {
+                word_so_far.push(*current_character);
+                trie.auto_suggest_internal(word_as_vec[1..].to_vec(), word_so_far)
+            }
+            None => self
+                .get_elements()
+                .into_iter()
+                .map(|x| format!("{}{}", word_so_far, x))
+                .collect(),
+        }
+    }
 }
 
 fn main() {
     let mut tr = Trie::new();
     tr.insert("Hi there".to_string());
     let answer = tr.fetch("Hi".to_string());
-    println!("{:?}", answer)
+    println!("{:?}", answer);
+    let answer = tr.auto_suggest("Hi there".to_string());
+    println!("{:?}", answer);
 }
