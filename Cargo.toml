@@ -3,6 +3,10 @@ name = "auto_correct_n_suggest"
 version = "0.1.0"
 authors = ["Tevinthuku <tevinthuku@gmail.com>"]
 edition = "2018"
+description = "A rust Dictionary Trie. Performs autosuggestions on words with typos & autocompletes words 🦀"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Tevinthuku/rust-dictionary-autocomplete-autosuggest"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

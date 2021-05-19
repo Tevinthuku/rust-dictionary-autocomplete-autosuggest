@@ -42,10 +42,9 @@ mod tests {
         let words_available = dictionary
             .find_words_based_on_prefix("Dog".to_string())
             .expect("Words should be present");
-        assert_eq!(
-            vec!["Dog".to_string(), "Dogecoin".to_string()],
-            words_available
-        )
+
+        assert!(words_available.contains(&"Dog".to_string()));
+        assert!(words_available.contains(&"Dogecoin".to_string()))
     }
     #[test]
     fn should_auto_correct_if_word_provided_isnt_available() {

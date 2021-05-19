@@ -19,4 +19,6 @@ let typo_auto_suggestions = dictionary.auto_correct("Dogecoins".to_string())?; /
 
 ```
 
-Will Polish up Readme soon
+TODO:
+
+1. Add support for case in-sensitivity

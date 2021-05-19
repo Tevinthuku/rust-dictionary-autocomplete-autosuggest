@@ -122,10 +122,9 @@ mod tests {
         let full_words_available = trie
             .find_words_based_on_prefix("Dog".to_string())
             .expect("should return a list from the trie");
-        assert_eq!(
-            vec!["Dog".to_string(), "Dogecoin".to_string()],
-            full_words_available
-        )
+
+        assert!(full_words_available.contains(&"Dog".to_string()));
+        assert!(full_words_available.contains(&"Dogecoin".to_string()));
     }
 
     #[test]
