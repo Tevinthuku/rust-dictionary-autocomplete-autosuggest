@@ -1,6 +1,6 @@
 [package]
 name = "auto_correct_n_suggest"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Tevinthuku <tevinthuku@gmail.com>"]
 edition = "2018"
 description = "A rust Dictionary Trie. Performs autosuggestions on words with typos & autocompletes words 🦀"

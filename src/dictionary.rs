@@ -87,7 +87,7 @@ impl Trie {
         mut word_so_far: String,
     ) -> Option<Vec<String>> {
         if word_as_vec.is_empty() {
-            return Some(vec![word_so_far]);
+            return Some(self.combine_incomplete_word_with_suffixes(word_so_far));
         }
         let current_character = &word_as_vec[0];
         let child = self.children.get_mut(current_character);
@@ -108,6 +108,14 @@ impl Trie {
                 Some(result)
             }
         }
+    }
+
+    fn combine_incomplete_word_with_suffixes(&mut self, word_so_far: String) -> Vec<String> {
+        let suffuxes_of_incomplete_word = self.get_elements();
+        suffuxes_of_incomplete_word
+            .into_iter()
+            .map(|suffix| format!("{}{}", word_so_far, suffix))
+            .collect()
     }
 }
 
@@ -152,5 +160,17 @@ mod tests {
         trie.insert("Dogecoin".to_string());
         let full_words_available = trie.auto_suggest("Cat".to_string());
         assert_eq!(full_words_available, None)
+    }
+
+    #[test]
+    fn should_return_suggestions_if_similar_words_exist_in_dictionary_if_word_isnt_complete() {
+        let mut trie = Trie::new();
+        trie.insert("Dog".to_string());
+        trie.insert("Dogecoin".to_string());
+        let full_words_available = trie
+            .auto_suggest("Do".to_string())
+            .expect("Dog & Dogecoin to be returned");
+        assert!(full_words_available.contains(&"Dog".to_string()));
+        assert!(full_words_available.contains(&"Dogecoin".to_string()))
     }
 }
