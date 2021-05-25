@@ -8,10 +8,12 @@ A rust Dictionary Trie. Performs autosuggestions on words with typos & autocompl
 
 ## Installation
 
-Add 
+Add
+
 ```
 auto_correct_n_suggest = "0.1.0"
 ```
+
 to your Cargo.toml
 
 ### How to use
@@ -30,7 +32,3 @@ let words_available = dictionary.find_words_based_on_prefix("Dog".to_string())?;
 let typo_auto_suggestions = dictionary.auto_correct("Dogecoins".to_string())?; // vec!["Dogecoin"]
 
 ```
-
-TODO:
-
-1. Add support for case in-sensitivity
