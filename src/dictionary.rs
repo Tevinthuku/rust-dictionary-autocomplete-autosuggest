@@ -31,20 +31,19 @@ impl Trie {
     }
 
     pub fn find_words_based_on_prefix(&mut self, prefix: String) -> Option<Vec<String>> {
-        let chars: Vec<char> = prefix.chars().collect();
-        let result = self.find_words_based_on_prefix_internal(chars)?;
-        let result = result
+        let suffixes = self.find_words_based_on_prefix_internal(&prefix)?;
+        let result = suffixes
             .into_iter()
             .map(|suffix| format!("{}{}", prefix, suffix))
             .collect();
         Some(result)
     }
-    fn find_words_based_on_prefix_internal(&mut self, prefix: Vec<char>) -> Option<Vec<String>> {
+    fn find_words_based_on_prefix_internal(&mut self, prefix: &str) -> Option<Vec<String>> {
         if prefix.is_empty() {
             return Some(self.get_elements());
         }
-        let child = self.children.get_mut(&prefix[0])?;
-        let result = child.find_words_based_on_prefix_internal(prefix[1..].to_vec())?;
+        let child = self.children.get_mut(&prefix.chars().next().unwrap())?;
+        let result = child.find_words_based_on_prefix_internal(&prefix[1..])?;
         Some(result)
     }
 
