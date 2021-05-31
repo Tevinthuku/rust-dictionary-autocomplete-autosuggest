@@ -16,18 +16,17 @@ impl Trie {
     pub fn insert(&mut self, word: String) {
         let mut word_with_suffix = word;
         word_with_suffix.push(*ENDS_HERE);
-        let chars: Vec<char> = word_with_suffix.chars().collect();
-        self.insert_internal(chars)
+        self.insert_internal(&word_with_suffix)
     }
 
-    fn insert_internal(&mut self, chars: Vec<char>) {
-        if chars.is_empty() {
+    fn insert_internal(&mut self, word: &str) {
+        if word.is_empty() {
             return;
         }
         self.children
-            .entry(chars[0])
+            .entry(word.chars().next().unwrap())
             .or_insert_with(Trie::new)
-            .insert_internal(chars[1..].to_vec())
+            .insert_internal(&word[1..])
     }
 
     pub fn find_words_based_on_prefix(&mut self, prefix: String) -> Option<Vec<String>> {

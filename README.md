@@ -11,7 +11,7 @@ A rust Dictionary Trie. Performs autosuggestions on words with typos & autocompl
 Add
 
 ```
-auto_correct_n_suggest = "0.1.0"
+auto_correct_n_suggest = "1.0.0"
 ```
 
 to your Cargo.toml
@@ -29,6 +29,6 @@ dictionary.insert(word2);
 
 let words_available = dictionary.find_words_based_on_prefix("Dog".to_string())?; // vec!["Dog", "Dogecoin"]
 
-let typo_auto_suggestions = dictionary.auto_correct("Dogecoins".to_string())?; // vec!["Dogecoin"]
+let typo_auto_suggestions = dictionary.auto_suggest_alternative_words("Dogecoins".to_string())?; // vec!["Dogecoin"]
 
 ```
