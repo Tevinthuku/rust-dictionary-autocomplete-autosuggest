@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-static ENDS_HERE: &str = "*";
+static ENDS_HERE: &char = &'*';
 
 #[derive(Debug)]
 pub struct Trie {
@@ -15,7 +15,7 @@ impl Trie {
     }
     pub fn insert(&mut self, word: String) {
         let mut word_with_suffix = word;
-        word_with_suffix.push_str(ENDS_HERE);
+        word_with_suffix.push(*ENDS_HERE);
         let chars: Vec<char> = word_with_suffix.chars().collect();
         self.insert_internal(chars)
     }
@@ -31,19 +31,19 @@ impl Trie {
     }
 
     pub fn find_words_based_on_prefix(&mut self, prefix: String) -> Option<Vec<String>> {
-        let suffixes = self.find_words_based_on_prefix_internal(&prefix)?;
+        let suffixes = self.get_suffixes_of_prefix(&prefix)?;
         let result = suffixes
             .into_iter()
             .map(|suffix| format!("{}{}", prefix, suffix))
             .collect();
         Some(result)
     }
-    fn find_words_based_on_prefix_internal(&mut self, prefix: &str) -> Option<Vec<String>> {
+    fn get_suffixes_of_prefix(&mut self, prefix: &str) -> Option<Vec<String>> {
         if prefix.is_empty() {
             return Some(self.get_elements());
         }
         let child = self.children.get_mut(&prefix.chars().next().unwrap())?;
-        let result = child.find_words_based_on_prefix_internal(&prefix[1..])?;
+        let result = child.get_suffixes_of_prefix(&prefix[1..])?;
         Some(result)
     }
 
@@ -53,7 +53,7 @@ impl Trie {
         for (key, trie) in &mut self.children {
             let mut sub_results = Vec::new();
 
-            if key.to_string() == ENDS_HERE {
+            if key == ENDS_HERE {
                 sub_results.push(String::from(""))
             } else {
                 sub_results = trie.combine_word_with_available_suffixes(key.to_string())
