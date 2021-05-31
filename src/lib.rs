@@ -24,7 +24,7 @@ impl Dictionary {
         self.internal.find_words_based_on_prefix(prefix)
     }
 
-    pub fn auto_correct(&mut self, word: String) -> Option<Vec<String>> {
+    pub fn auto_suggest_alternative_words(&mut self, word: String) -> Option<Vec<String>> {
         self.internal.auto_suggest(word)
     }
 }
@@ -54,7 +54,7 @@ mod tests {
         dictionary.insert(word1);
         dictionary.insert(word2);
         let words_available = dictionary
-            .auto_correct("Dogecoins".to_string())
+            .auto_suggest_alternative_words("Dogecoins".to_string())
             .expect("Suggestions should be available");
         assert_eq!(vec!["Dogecoin".to_string()], words_available)
     }
@@ -66,7 +66,7 @@ mod tests {
         let word2 = "Dogecoin".to_string();
         dictionary.insert(word1);
         dictionary.insert(word2);
-        let words_available = dictionary.auto_correct("Cat".to_string());
+        let words_available = dictionary.auto_suggest_alternative_words("Cat".to_string());
         assert_eq!(words_available, None)
     }
 }

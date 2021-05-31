@@ -57,60 +57,45 @@ impl Trie {
             if key.to_string() == ENDS_HERE {
                 sub_results.push(String::from(""))
             } else {
-                sub_results = trie
-                    .get_elements()
-                    .into_iter()
-                    .map(|st| {
-                        let mut resulty = key.to_string();
-                        resulty.push_str(&st);
-                        resulty
-                    })
-                    .collect()
+                sub_results = trie.combine_word_with_available_suffixes(key.to_string())
             }
             result.append(&mut sub_results)
         }
         result
     }
 
-    pub fn auto_suggest(&mut self, word: String) -> Option<Vec<String>> {
-        let word_in_vec: Vec<char> = word.chars().collect();
-        if word_in_vec.is_empty() {
+    pub fn auto_suggest(&mut self, wrong_word: String) -> Option<Vec<String>> {
+        if wrong_word.is_empty() {
             return None;
         }
-        let initial_word = String::default();
-        self.auto_suggest_internal(word_in_vec, initial_word)
+        let correct_substring_so_far = String::default();
+        self.auto_suggest_internal(wrong_word.chars().collect(), correct_substring_so_far)
     }
 
     fn auto_suggest_internal(
         &mut self,
-        word_as_vec: Vec<char>,
+        word_chars: Vec<char>,
         mut word_so_far: String,
     ) -> Option<Vec<String>> {
-        if word_as_vec.is_empty() {
-            return Some(self.combine_incomplete_word_with_suffixes(word_so_far));
+        if word_chars.is_empty() {
+            return Some(self.combine_word_with_available_suffixes(word_so_far));
         }
-        let current_character = &word_as_vec[0];
+        let current_character = &word_chars[0];
         let child = self.children.get_mut(current_character);
         match child {
             Some(trie) => {
                 word_so_far.push(*current_character);
-                trie.auto_suggest_internal(word_as_vec[1..].to_vec(), word_so_far)
+                trie.auto_suggest_internal(word_chars[1..].to_vec(), word_so_far)
             }
+            None if word_so_far.is_empty() => None,
             None => {
-                if word_so_far.is_empty() {
-                    return None; // There's no need to traverse the elements if not a single character was found to match
-                }
-                let result = self
-                    .get_elements()
-                    .into_iter()
-                    .map(|x| format!("{}{}", word_so_far, x))
-                    .collect();
+                let result = self.combine_word_with_available_suffixes(word_so_far);
                 Some(result)
             }
         }
     }
 
-    fn combine_incomplete_word_with_suffixes(&mut self, word_so_far: String) -> Vec<String> {
+    fn combine_word_with_available_suffixes(&mut self, word_so_far: String) -> Vec<String> {
         let suffuxes_of_incomplete_word = self.get_elements();
         suffuxes_of_incomplete_word
             .into_iter()
