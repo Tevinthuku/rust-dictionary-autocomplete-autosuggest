@@ -67,28 +67,28 @@ impl Trie {
         if wrong_word.is_empty() {
             return None;
         }
-        let correct_substring_so_far = String::default();
-        self.auto_suggest_internal(wrong_word.chars().collect(), correct_substring_so_far)
+        let word_constructed = String::default();
+        self.auto_suggest_internal(&wrong_word, word_constructed)
     }
 
     fn auto_suggest_internal(
         &mut self,
-        word_chars: Vec<char>,
-        mut word_so_far: String,
+        wrong_word: &str,
+        mut word_constructed_so_far: String,
     ) -> Option<Vec<String>> {
-        if word_chars.is_empty() {
-            return Some(self.combine_word_with_available_suffixes(word_so_far));
+        if wrong_word.is_empty() {
+            return Some(self.combine_word_with_available_suffixes(word_constructed_so_far));
         }
-        let current_character = &word_chars[0];
+        let current_character = &wrong_word.chars().next().unwrap();
         let child = self.children.get_mut(current_character);
         match child {
             Some(trie) => {
-                word_so_far.push(*current_character);
-                trie.auto_suggest_internal(word_chars[1..].to_vec(), word_so_far)
+                word_constructed_so_far.push(*current_character);
+                trie.auto_suggest_internal(&wrong_word[1..], word_constructed_so_far)
             }
-            None if word_so_far.is_empty() => None,
+            None if word_constructed_so_far.is_empty() => None,
             None => {
-                let result = self.combine_word_with_available_suffixes(word_so_far);
+                let result = self.combine_word_with_available_suffixes(word_constructed_so_far);
                 Some(result)
             }
         }
