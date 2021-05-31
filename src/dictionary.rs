@@ -39,14 +39,14 @@ impl Trie {
     }
     fn get_suffixes_of_prefix(&mut self, prefix: &str) -> Option<Vec<String>> {
         if prefix.is_empty() {
-            return Some(self.get_elements());
+            return Some(self.get_list_of_remaining_words());
         }
         let child = self.children.get_mut(&prefix.chars().next().unwrap())?;
         let result = child.get_suffixes_of_prefix(&prefix[1..])?;
         Some(result)
     }
 
-    fn get_elements(&mut self) -> Vec<String> {
+    fn get_list_of_remaining_words(&mut self) -> Vec<String> {
         let mut result = Vec::new();
 
         for (key, trie) in &mut self.children {
@@ -94,8 +94,8 @@ impl Trie {
     }
 
     fn combine_word_with_available_suffixes(&mut self, word_so_far: String) -> Vec<String> {
-        let suffuxes_of_incomplete_word = self.get_elements();
-        suffuxes_of_incomplete_word
+        let available_suffixes_of_word_so_far = self.get_list_of_remaining_words();
+        available_suffixes_of_word_so_far
             .into_iter()
             .map(|suffix| format!("{}{}", word_so_far, suffix))
             .collect()
